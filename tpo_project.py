@@ -16,7 +16,15 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-from tpo_helper import get_ticksize, abc, get_mean, get_rf, get_context, get_contextnow
+from tpo_helper import (
+    get_ticksize,
+    abc,
+    get_mean,
+    get_rf,
+    get_context,
+    get_contextnow,
+)
+from binance_data import fetch_binance_data
 import numpy as np
 from datetime import timedelta
 # from transform import transform_live, transform_hist
@@ -33,9 +41,8 @@ avglen = 10  # num days mean to get values
 days_to_display = 10  # Number of last n days you want on the screen to display
 mode = 'tpo'  # for volume --> 'vol'
 
-dfhist = pd.read_csv('history.txt')  # 1 min historical data in symbol,datetime,open,high,low,close,volume
-
-# Check the sample file. Match the format exactly else code will not run.
+# Fetch last 4 full UTC days plus current day's session from Binance
+dfhist = fetch_binance_data()
 
 dfhist.iloc[:, 2:] = dfhist.iloc[:, 2:].apply(pd.to_numeric)
 

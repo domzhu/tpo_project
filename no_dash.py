@@ -11,6 +11,7 @@ This is for checking whether the issue is due to dash dependency. It generates s
 import pandas as pd
 import plotly.graph_objects as go
 from tpo_helper import get_ticksize, abc, get_mean, get_rf, get_context, get_contextnow
+from binance_data import fetch_binance_data
 import numpy as np
 from datetime import timedelta
 from plotly.offline import plot
@@ -24,11 +25,10 @@ avglen = 10  # num days mean to get values
 days_to_display = 10  # Number of last n days you want on the screen to display
 mode = 'tpo'  # for volume --> 'vol'
 
-# 1 min historical data in symbol,datetime,open,high,low,close,volume
-dfhist = pd.read_csv('history.txt')
+# Fetch last 4 full UTC days plus current day's session from Binance
+dfhist = fetch_binance_data()
 
-# Check the sample file. Match the format exactly else code will not run.
-
+# Convert numeric columns
 dfhist.iloc[:, 2:] = dfhist.iloc[:, 2:].apply(pd.to_numeric)
 
 # # It calculates tick size for TPO based on mean and standard deviation.
